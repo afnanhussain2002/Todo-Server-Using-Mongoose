@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const todoHandler = require('./routesHandler/todoHandler')
 const app = express();
 require("dotenv").config();
 const port = 5000;
@@ -13,14 +14,23 @@ mongoose.connect(uri, {
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 2000
   })
-  const db =mongoose.connection
+  .then(() =>{
+    console.log('Connect With MongoDB');
+  })
+  .catch(err =>{
+    console.log(err);
+  })
+/*   const db =mongoose.connection
   db.on('error', err => {
     console.log('Connection error:', err);
 });
 
 db.once('open', () => {
     console.log('Connected to MongoDB');
-});
+}); */
+
+// application routes
+app.use('/todo', todoHandler)
 
 app.get('/', (req, res) => {
     res.send('Learn mongoose!');
